@@ -17,7 +17,7 @@ fi
 mkdir $backupdir
 mkdir $backupdir/.bash
 
-for i in .bashrc .bash_profile; do
+for i in .bashrc .bash_profile .vimrc; do
   if [ -e $i ] || [ -h $i ]; then
     mv -f $i $backupdir
   fi
@@ -42,3 +42,6 @@ done
 
 echo "Linking .bash_profile..."
 ln -s .bashrc .bash_profile
+
+echo "Linking .vimrc"
+ln -s dotfiles/vimrc .vimrc
