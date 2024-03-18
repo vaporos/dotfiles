@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+date=`date +%Y-%m-%d`
+backupdir=~/.dotfiles-backup/$date-$$
+
+if [ -d $backupdir ]; then
+  echo "$backupdir already exists!"
+  exit -1
+fi
+
+cd ~
+
+if [ ! -d ~/.dotfiles-backup ]; then
+  mkdir ~/.dotfiles-backup
+fi
+
+mkdir $backupdir
+mkdir $backupdir/.bash
+
+for i in .bashrc .bash_profile; do
+  if [ -e $i ] || [ -h $i ]; then
+    mv -f $i $backupdir
+  fi
+done
+
+if [ -d .bash ]; then
+  for i in .bash/*; do
+    mv $i $backupdir/.bash/
+  done
+fi
+
+if [ ! -d .bash ]; then 
+  mkdir .bash
+fi
+
+echo "Linking .bashrc..."
+ln -s dotfiles/bashrc .bashrc
+for i in $(cd dotfiles/bash; /bin/ls -d *); do
+  echo "Linking .bash/$i..."
+  ln -s ../dotfiles/bash/$i .bash/$i
+done
+
+echo "Linking .bash_profile..."
+ln -s .bashrc .bash_profile
